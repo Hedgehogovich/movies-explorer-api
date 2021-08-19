@@ -1,21 +1,16 @@
 const router = require('express').Router();
 
-const { Response } = require('../../utils/Response');
-const { register, login } = require('./authController');
-const { authLoginValidationMiddleware, authRegisterValidationMiddleware } = require('./authMiddleware');
-const { LoginContext, RegisterContext } = require('./authContext');
+const { Response } = require('../utils/Response');
+const { register, login } = require('../controllers/auth');
+const { authLoginValidationMiddleware, authRegisterValidationMiddleware } = require('../middlewares/auth');
 
 router.post('/signin', authLoginValidationMiddleware, (req, res, next) => {
-  const loginContext = new LoginContext(req.body);
-
-  login(loginContext)
+  login(req.body)
     .then((token) => res.send(new Response(token).toObject()))
     .catch(next);
 });
 router.post('/signup', authRegisterValidationMiddleware, (req, res, next) => {
-  const registerContext = new RegisterContext(req.body);
-
-  register(registerContext)
+  register(req.body)
     .then(() => res.send(new Response({ message: 'Вы успешно зарегистрированы!' }).toObject()))
     .catch(next);
 });

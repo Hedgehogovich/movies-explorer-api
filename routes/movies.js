@@ -1,15 +1,14 @@
 const router = require('express').Router();
 
-const { authMiddleware } = require('../auth/authMiddleware');
-const { Response } = require('../../utils/Response');
+const { authMiddleware } = require('../middlewares/auth');
+const { Response } = require('../utils/Response');
 
 const {
   getMovies,
   createMovie,
   deleteMovie,
-} = require('./moviesController');
-const { createMovieValidationMiddleware, removeMovieIdValidationMiddleware } = require('./moviesMiddleware');
-const { CreateMovieContext } = require('./moviesContexts');
+} = require('../controllers/movies');
+const { createMovieValidationMiddleware, removeMovieIdValidationMiddleware } = require('../middlewares/movies');
 
 router.get('/', authMiddleware, (req, res, next) => {
   getMovies()
@@ -18,18 +17,19 @@ router.get('/', authMiddleware, (req, res, next) => {
 });
 
 router.post('/', authMiddleware, createMovieValidationMiddleware, (req, res, next) => {
-  const createMovieContext = new CreateMovieContext(req.body);
-
-  createMovie(createMovieContext)
+  createMovie({
+    ...req.body,
+    owner: req.user._id,
+  })
     .then((movie) => res.send(new Response(movie).toObject()))
     .catch(next);
 });
 
 router.delete('/:movieId', authMiddleware, removeMovieIdValidationMiddleware, (req, res, next) => {
   const { movieId } = req.params;
-  const userId = req.user._id;
+  const currentUserId = req.user._id;
 
-  deleteMovie(movieId, userId)
+  deleteMovie({ movieId, currentUserId })
     .then((movie) => res.send(new Response(movie).toObject()))
     .catch(next);
 });

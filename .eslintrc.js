@@ -15,6 +15,5 @@ module.exports = {
     'consistent-return': 0,
     'no-console': ['error', { allow: ['error'] }],
     'no-restricted-syntax': 0,
-    'max-classes-per-file': 0,
   },
 };

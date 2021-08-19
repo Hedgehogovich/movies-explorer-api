@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
 const { celebrate, Segments, Joi } = require('celebrate');
 
-const { ENCRYPTION_KEY } = require('../../utils/constants');
-const { UNAUTHORIZED } = require('../../utils/httpStatuses');
+const { ENCRYPTION_KEY } = require('../utils/constants');
+const { UNAUTHORIZED } = require('../utils/httpStatuses');
 
-const authMiddleWare = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   const { authorization } = req.headers;
   const token = authorization ? authorization.replace('Bearer ', '') : null;
 
@@ -65,7 +65,7 @@ const authRegisterValidationMiddleware = celebrate({
 });
 
 module.exports = {
-  authMiddleWare,
+  authMiddleware,
   authLoginValidationMiddleware,
   authRegisterValidationMiddleware,
 };

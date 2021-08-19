@@ -6,25 +6,30 @@ const createMovieValidationMiddleware = celebrate({
       .messages({
         'any.required': 'Поле "Страна" обязательно для заполнения',
         'string.empty': 'Поле "Страна" обязательно для заполнения',
+        'string.base': 'Поле "Страна" должно быть строкой',
       }),
     director: Joi.string().required()
       .messages({
         'any.required': 'Поле "Режиссёр" обязательно для заполнения',
         'string.empty': 'Поле "Режиссёр" обязательно для заполнения',
+        'string.base': 'Поле "Режиссёр" должно быть строкой',
       }),
     duration: Joi.number().required()
       .messages({
         'any.required': 'Поле "Длительность" обязательно для заполнения',
+        'number.base': 'Поле "Длительность" должно быть числом',
       }),
     year: Joi.string().required()
       .messages({
         'any.required': 'Поле "Год" обязательно для заполнения',
         'string.empty': 'Поле "Год" обязательно для заполнения',
+        'string.base': 'Поле "Год" должно быть строкой',
       }),
     description: Joi.string().required()
       .messages({
         'any.required': 'Поле "Описание" обязательно для заполнения',
         'string.empty': 'Поле "Описание" обязательно для заполнения',
+        'string.base': 'Поле "Описание" должно быть строкой',
       }),
     image: Joi.string().uri().required().messages({
       'any.required': 'Поле "Ссылка на постер" обязательно для заполнения',
@@ -41,29 +46,23 @@ const createMovieValidationMiddleware = celebrate({
       'string.empty': 'Поле "Миниатюра" обязательно для заполнения',
       'string.uri': 'Некорректная ссылка на миниатюру',
     }),
-    owner: Joi.string().length(24).hex().required()
-      .messages({
-        'any.required': 'Некорректный ID владельца',
-        'string.base': 'Некорректный ID владельца',
-        'string.length': 'Некорректный ID владельца',
-        'string.hex': 'Некорректный ID владельца',
-      }),
-    movieId: Joi.string().length(24).hex().required()
+    movieId: Joi.string().required()
       .messages({
         'any.required': 'Некорректный ID фильма',
         'string.base': 'Некорректный ID фильма',
-        'string.length': 'Некорректный ID фильма',
-        'string.hex': 'Некорректный ID фильма',
+        'string.empty': 'Некорректный ID фильма',
       }),
-    nameRu: Joi.string().required()
+    nameRU: Joi.string().required()
       .messages({
         'any.required': 'Поле "Имя фильма на русском" обязательно для заполнения',
         'string.empty': 'Поле "Имя фильма на русском" для заполнения',
+        'string.base': 'Поле "Имя фильма на русском" должно быть строкой',
       }),
-    nameEn: Joi.string().required()
+    nameEN: Joi.string().required()
       .messages({
         'any.required': 'Поле "Имя фильма на английском" обязательно для заполнения',
         'string.empty': 'Поле "Имя фильма на английском" обязательно для заполнения',
+        'string.base': 'Поле "Имя фильма на английском" должно быть строкой',
       }),
   }),
 });

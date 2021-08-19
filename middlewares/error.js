@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { isCelebrateError } = require('celebrate');
 
-const { ForbiddenError } = require('../errors/ForbiddenError');
-const { ConflictError } = require('../errors/ConflictError');
-const { UnauthorizedError } = require('../errors/UnauthorizedError');
-const { NotFoundError } = require('../errors/NotFoundError');
-const { InternalServerError } = require('../errors/InternalServerError');
-const { BadRequestError } = require('../errors/BadRequestError');
-const { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND } = require('../httpStatuses');
+const { ForbiddenError } = require('../utils/errors/ForbiddenError');
+const { ConflictError } = require('../utils/errors/ConflictError');
+const { UnauthorizedError } = require('../utils/errors/UnauthorizedError');
+const { NotFoundError } = require('../utils/errors/NotFoundError');
+const { InternalServerError } = require('../utils/errors/InternalServerError');
+const { BadRequestError } = require('../utils/errors/BadRequestError');
+const { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND } = require('../utils/httpStatuses');
 
 function handleCelebrateError(err, req, res) {
   const [, firstSegmentError] = err.details.entries().next().value;
