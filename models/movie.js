@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
+const { t } = require('../utils/translate');
+
 const movieSchema = new mongoose.Schema({
   country: {
     type: String,
@@ -27,7 +29,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: (props) => `${props.value} не является корректным URL`,
+      message: (props) => t('field_is_incorrect_url', [props.value]),
     },
   },
   trailer: {
@@ -35,7 +37,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: (props) => `${props.value} не является корректным URL`,
+      message: (props) => t('field_is_incorrect_url', [props.value]),
     },
   },
   thumbnail: {
@@ -43,7 +45,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: (props) => `${props.value} не является корректным URL`,
+      message: (props) => t('field_is_incorrect_url', [props.value]),
     },
   },
   owner: {

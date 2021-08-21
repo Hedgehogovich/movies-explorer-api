@@ -8,6 +8,7 @@ const { NotFoundError } = require('../utils/errors/NotFoundError');
 const { InternalServerError } = require('../utils/errors/InternalServerError');
 const { BadRequestError } = require('../utils/errors/BadRequestError');
 const { BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND } = require('../utils/httpStatuses');
+const { t } = require('../utils/translate');
 
 function handleCelebrateError(err, req, res) {
   const [, firstSegmentError] = err.details.entries().next().value;
@@ -16,7 +17,7 @@ function handleCelebrateError(err, req, res) {
 }
 
 function handleUnexpectedError(err, res) {
-  res.status(INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+  res.status(INTERNAL_SERVER_ERROR).send({ message: t('server_error') });
 }
 
 module.exports = (err, req, res, next) => {
@@ -32,15 +33,15 @@ module.exports = (err, req, res, next) => {
   switch (err.name) {
     case mongoose.Error.ValidationError.name:
     case mongoose.Error.CastError.name:
-      res.status(BAD_REQUEST).send({ message: 'Некорректные данные' });
+      res.status(BAD_REQUEST).send({ message: t('incorrect_data') });
       return;
     case mongoose.Error.DocumentNotFoundError.name:
-      res.status(NOT_FOUND).send({ message: 'Запрашиваемые данные не найдены' });
+      res.status(NOT_FOUND).send({ message: t('data_not_found') });
       break;
     case SyntaxError.name:
       // Обработка исключения при некорректном JSON внутри express
       if (err.status === BAD_REQUEST && 'body' in err) {
-        res.status(BAD_REQUEST).send({ message: 'Некорректные данные' });
+        res.status(BAD_REQUEST).send({ message: t('incorrect_data') });
       } else {
         handleUnexpectedError(err, res);
       }

@@ -11,7 +11,7 @@ const {
 const { createMovieValidationMiddleware, removeMovieIdValidationMiddleware } = require('../middlewares/movies');
 
 router.get('/', authMiddleware, (req, res, next) => {
-  getMovies()
+  getMovies(req.user._id)
     .then((movies) => res.send(new Response(movies).toObject()))
     .catch(next);
 });

@@ -1,18 +1,19 @@
 const { celebrate, Segments, Joi } = require('celebrate');
+const { t } = require('../utils/translate');
 
 const userEditValidationMiddleware = celebrate({
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required().min(2).max(30)
       .messages({
-        'any.required': 'Поле Имя обязательно для заполнения',
-        'string.empty': 'Поле Имя обязательно для заполнения',
-        'string.min': 'Имя должно быть не менее 2 символов в длину',
-        'string.max': 'Имя должно быть не более 30 символов в длину',
+        'any.required': t('field_required', ['Имя']),
+        'string.empty': t('field_required', ['Имя']),
+        'string.min': t('min_field_length_required', ['Имя', '2']),
+        'string.max': t('max_field_length_required', ['Имя', '30']),
       }),
     email: Joi.string().email().required().messages({
-      'any.required': 'Поле Email является обязательным для заполнения',
-      'string.empty': 'Поле Email является обязательным для заполнения',
-      'string.email': 'Некорректный Email',
+      'any.required': t('field_required', ['Email']),
+      'string.empty': t('field_required', ['Email']),
+      'string.email': t('incorrect_email'),
     }),
   }),
 });

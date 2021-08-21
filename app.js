@@ -6,15 +6,13 @@ const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 
-const usersRoutes = require('./routes/users');
-const moviesRoutes = require('./routes/movies');
-const authRoutes = require('./routes/auth');
+const router = require('./routes');
 
 const errorMiddleware = require('./middlewares/error');
 const notFoundMiddleware = require('./middlewares/notFound');
 
 const { makeRequestLogger, makeErrorLogger } = require('./middlewares/logger');
-const { createRateLimiter } = require('./middlewares/rateLimiter');
+const { makeRateLimiter } = require('./middlewares/rateLimiter');
 const {
   FRONTEND_ORIGIN, IS_PRODUCTION, LISTEN_PORT, DB_ADDRESS,
 } = require('./utils/constants');
@@ -39,12 +37,10 @@ if (IS_PRODUCTION) {
   app.use(makeRequestLogger());
   app.use(helmet());
 
-  app.use(createRateLimiter());
+  app.use(makeRateLimiter());
 }
 
-app.use('/users', usersRoutes);
-app.use('/movies', moviesRoutes);
-app.use(authRoutes);
+app.use('/api', router);
 
 if (IS_PRODUCTION) {
   app.use(makeErrorLogger());

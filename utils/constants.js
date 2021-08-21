@@ -5,7 +5,7 @@ const {
   FRONTEND_ORIGIN = 'http://localhost:3001',
   ENCRYPTION_KEY = 'some-secret-key',
   LISTEN_PORT = 3000,
-  DB_ADDRESS = 'mongodb://localhost:27017/bitfilmsdb',
+  DB_ADDRESS = 'mongodb://localhost:27017/moviesdb',
 } = process.env;
 const JWT_SESSION_NAME = 'jwt';
 

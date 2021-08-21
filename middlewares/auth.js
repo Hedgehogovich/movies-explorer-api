@@ -3,6 +3,7 @@ const { celebrate, Segments, Joi } = require('celebrate');
 
 const { ENCRYPTION_KEY } = require('../utils/constants');
 const { UNAUTHORIZED } = require('../utils/httpStatuses');
+const { t } = require('../utils/translate');
 
 const authMiddleware = (req, res, next) => {
   const { authorization } = req.headers;
@@ -11,7 +12,7 @@ const authMiddleware = (req, res, next) => {
   if (!token) {
     return res
       .status(UNAUTHORIZED)
-      .send({ message: 'Необходима авторизация' });
+      .send({ message: t('authorization_needed') });
   }
 
   let payload;
@@ -21,7 +22,7 @@ const authMiddleware = (req, res, next) => {
   } catch (err) {
     return res
       .status(UNAUTHORIZED)
-      .send({ message: 'Необходима авторизация' });
+      .send({ message: t('authorization_needed') });
   }
 
   req.user = payload;
@@ -31,13 +32,13 @@ const authMiddleware = (req, res, next) => {
 const authLoginValidationMiddleware = celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().email().required().messages({
-      'any.required': 'Поле Email является обязательным для заполнения',
-      'string.empty': 'Поле Email является обязательным для заполнения',
-      'string.email': 'Некорректный Email',
+      'any.required': t('field_required', ['Email']),
+      'string.empty': t('field_required', ['Email']),
+      'string.email': t('incorrect_email'),
     }),
     password: Joi.string().required().messages({
-      'any.required': 'Поле Пароль является обязательным для заполнения',
-      'string.empty': 'Поле Пароль является обязательным для заполнения',
+      'any.required': t('field_required', ['Пароль']),
+      'string.empty': t('field_required', ['Пароль']),
     }),
   }),
 });
@@ -45,21 +46,21 @@ const authLoginValidationMiddleware = celebrate({
 const authRegisterValidationMiddleware = celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().email().required().messages({
-      'any.required': 'Поле Email является обязательным для заполнения',
-      'string.empty': 'Поле Email является обязательным для заполнения',
-      'string.email': 'Некорректный Email',
+      'any.required': t('field_required', ['Email']),
+      'string.empty': t('field_required', ['Email']),
+      'string.email': t('incorrect_email'),
     }),
     password: Joi.string().required().min(8).messages({
-      'any.required': 'Поле Пароль является обязательным для заполнения',
-      'string.empty': 'Поле Пароль является обязательным для заполнения',
-      'string.min': 'Пароль должен быть не менее 8 символов в длину',
+      'any.required': t('field_required', ['Пароль']),
+      'string.empty': t('field_required', ['Пароль']),
+      'string.min': t('min_password_length_required'),
     }),
     name: Joi.string().required().min(2).max(30)
       .messages({
-        'any.required': 'Поле Имя является обязательным для заполнения',
-        'string.empty': 'Поле Имя является обязательным для заполнения',
-        'string.min': 'Имя должно быть не менее 2 символов в длину',
-        'string.max': 'Имя должно быть не более 30 символов в длину',
+        'any.required': t('field_required', ['Имя']),
+        'string.empty': t('field_required', ['Имя']),
+        'string.min': t('min_field_length_required', ['Имя', '2']),
+        'string.max': t('max_field_length_required', ['Имя', '30']),
       }),
   }),
 });
