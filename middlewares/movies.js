@@ -70,12 +70,10 @@ const createMovieValidationMiddleware = celebrate({
 
 const removeMovieIdValidationMiddleware = celebrate({
   [Segments.PARAMS]: Joi.object().keys({
-    movieId: Joi.string().length(24).hex().required()
+    movieId: Joi.number().required()
       .messages({
         'any.required': t(tKeys.incorrect_movie_id),
-        'string.base': t(tKeys.incorrect_movie_id),
-        'string.length': t(tKeys.incorrect_movie_id),
-        'string.hex': t(tKeys.incorrect_movie_id),
+        'number.base': t(tKeys.incorrect_movie_id),
       }),
   }),
 });
