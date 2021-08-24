@@ -39,7 +39,7 @@ if (IS_PRODUCTION) {
   app.use(makeRateLimiter());
 }
 
-app.use('/api', router);
+app.use(router);
 
 app.use(makeErrorLogger());
 app.use(errorMiddleware);

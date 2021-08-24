@@ -7,10 +7,10 @@ const usersRouter = require('./users');
 const { authMiddleware } = require('../middlewares/auth');
 const { notFoundMiddleware } = require('../middlewares/notFound');
 
-router.use(authRouter);
+router.use('/api', authRouter);
 router.use(authMiddleware);
-router.use('/movies', moviesRouter);
-router.use('/users', usersRouter);
+router.use('/api/movies', moviesRouter);
+router.use('/api/users', usersRouter);
 router.use(notFoundMiddleware);
 
 module.exports = router;
