@@ -1,7 +1,9 @@
 const User = require('../models/user');
+const { handleControllerError } = require('../utils/handleControllerError');
 
 module.exports.findOneUser = (userId) => User.findById(userId)
-  .orFail();
+  .orFail()
+  .catch(handleControllerError);
 
 module.exports.editUser = ({ userId, email, name }) => User.findByIdAndUpdate(
   userId,
@@ -11,4 +13,5 @@ module.exports.editUser = ({ userId, email, name }) => User.findByIdAndUpdate(
     runValidators: true,
   },
 )
-  .orFail();
+  .orFail()
+  .catch(handleControllerError);

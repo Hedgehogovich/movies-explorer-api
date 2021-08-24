@@ -1,2 +1,2 @@
 # movies-explorer-api
-Backend - https://api.chajurassic.students.nomoredomains.rocks/
+Сервер - https://api.chajurassic.students.nomoredomains.rocks/api/

@@ -1,6 +1,5 @@
 const router = require('express').Router();
 
-const { authMiddleware } = require('../middlewares/auth');
 const { Response } = require('../utils/Response');
 
 const {
@@ -10,13 +9,13 @@ const {
 } = require('../controllers/movies');
 const { createMovieValidationMiddleware, removeMovieIdValidationMiddleware } = require('../middlewares/movies');
 
-router.get('/', authMiddleware, (req, res, next) => {
+router.get('/', (req, res, next) => {
   getMovies(req.user._id)
     .then((movies) => res.send(new Response(movies).toObject()))
     .catch(next);
 });
 
-router.post('/', authMiddleware, createMovieValidationMiddleware, (req, res, next) => {
+router.post('/', createMovieValidationMiddleware, (req, res, next) => {
   createMovie({
     ...req.body,
     owner: req.user._id,
@@ -25,7 +24,7 @@ router.post('/', authMiddleware, createMovieValidationMiddleware, (req, res, nex
     .catch(next);
 });
 
-router.delete('/:movieId', authMiddleware, removeMovieIdValidationMiddleware, (req, res, next) => {
+router.delete('/:movieId', removeMovieIdValidationMiddleware, (req, res, next) => {
   const { movieId } = req.params;
   const currentUserId = req.user._id;
 

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-const { t } = require('../utils/translate');
+const { t, tKeys } = require('../utils/translate');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -29,7 +29,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: (props) => t('field_is_incorrect_url', [props.value]),
+      message: (props) => t(tKeys.field_is_incorrect_url, [props.value]),
     },
   },
   trailer: {
@@ -37,7 +37,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: (props) => t('field_is_incorrect_url', [props.value]),
+      message: (props) => t(tKeys.field_is_incorrect_url, [props.value]),
     },
   },
   thumbnail: {
@@ -45,7 +45,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: (props) => t('field_is_incorrect_url', [props.value]),
+      message: (props) => t(tKeys.field_is_incorrect_url, [props.value]),
     },
   },
   owner: {
@@ -53,7 +53,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: String,
+    type: Number,
     required: true,
   },
   nameRU: {

@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { BCRYPT_SALT_ROUNDS, MONGODB_DUPLICATE_ERROR_CODE, ENCRYPTION_KEY } = require('../utils/constants');
 const { ConflictError } = require('../utils/errors/ConflictError');
-const { UnauthorizedError } = require('../utils/errors/UnauthorizedError');
-const { t } = require('../utils/translate');
+const { t, tKeys } = require('../utils/translate');
+const { handleControllerError } = require('../utils/handleControllerError');
 
 const TOKEN_EXPIRE_TIME = 604800;
 
@@ -20,11 +20,10 @@ module.exports.register = ({
     password: hash,
   }))
   .catch((err) => {
-    if (err.code === MONGODB_DUPLICATE_ERROR_CODE) {
-      throw new ConflictError(t('user_already_exists]'));
-    } else {
-      throw err;
-    }
+    const error = err.code === MONGODB_DUPLICATE_ERROR_CODE
+      ? new ConflictError(t(tKeys.user_already_exists)) : err;
+
+    handleControllerError(error);
   });
 
 module.exports.login = ({ email, password }) => User.findUserByCredentials(email, password)
@@ -33,6 +32,4 @@ module.exports.login = ({ email, password }) => User.findUserByCredentials(email
     ENCRYPTION_KEY,
     { expiresIn: TOKEN_EXPIRE_TIME },
   ))
-  .catch((err) => {
-    throw new UnauthorizedError(err.message);
-  });
+  .catch(handleControllerError);

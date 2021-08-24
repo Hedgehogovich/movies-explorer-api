@@ -1,6 +1,6 @@
 const { NotFoundError } = require('../utils/errors/NotFoundError');
-const { t } = require('../utils/translate');
+const { t, tKeys } = require('../utils/translate');
 
-module.exports = (req, res, next) => {
-  next(new NotFoundError(t('page_not_found')));
+module.exports.notFoundMiddleware = (req, res, next) => {
+  next(new NotFoundError(t(tKeys.page_not_found)));
 };

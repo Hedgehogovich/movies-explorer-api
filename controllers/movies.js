@@ -1,6 +1,7 @@
 const Movie = require('../models/movie');
 const { ForbiddenError } = require('../utils/errors/ForbiddenError');
-const { t } = require('../utils/translate');
+const { t, tKeys } = require('../utils/translate');
+const { handleControllerError } = require('../utils/handleControllerError');
 
 module.exports.getMovies = (userId) => Movie.find({ owner: userId })
   .sort('-createdAt');
@@ -11,8 +12,9 @@ module.exports.deleteMovie = ({ movieId, currentUserId }) => Movie.findById(movi
   .orFail()
   .then((movie) => {
     if (movie.owner.toString() !== currentUserId) {
-      throw new ForbiddenError(t('no_rights_for_movie_remove'));
+      throw new ForbiddenError(t(tKeys.no_rights_for_movie_remove));
     }
 
     return Movie.findByIdAndRemove(movieId).orFail();
-  });
+  })
+  .catch(handleControllerError);

@@ -8,8 +8,7 @@ require('dotenv').config();
 
 const router = require('./routes');
 
-const errorMiddleware = require('./middlewares/error');
-const notFoundMiddleware = require('./middlewares/notFound');
+const { errorMiddleware } = require('./middlewares/error');
 
 const { makeRequestLogger, makeErrorLogger } = require('./middlewares/logger');
 const { makeRateLimiter } = require('./middlewares/rateLimiter');
@@ -33,8 +32,8 @@ app.use(cors({
   optionsSuccessStatus: 200,
 }));
 
+app.use(makeRequestLogger());
 if (IS_PRODUCTION) {
-  app.use(makeRequestLogger());
   app.use(helmet());
 
   app.use(makeRateLimiter());
@@ -42,11 +41,7 @@ if (IS_PRODUCTION) {
 
 app.use('/api', router);
 
-if (IS_PRODUCTION) {
-  app.use(makeErrorLogger());
-}
-
-app.use(notFoundMiddleware);
+app.use(makeErrorLogger());
 app.use(errorMiddleware);
 
 app.listen(LISTEN_PORT);

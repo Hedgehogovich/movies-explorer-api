@@ -2,17 +2,15 @@ const jwt = require('jsonwebtoken');
 const { celebrate, Segments, Joi } = require('celebrate');
 
 const { ENCRYPTION_KEY } = require('../utils/constants');
-const { UNAUTHORIZED } = require('../utils/httpStatuses');
-const { t } = require('../utils/translate');
+const { t, tKeys } = require('../utils/translate');
+const { UnauthorizedError } = require('../utils/errors/UnauthorizedError');
 
 const authMiddleware = (req, res, next) => {
   const { authorization } = req.headers;
   const token = authorization ? authorization.replace('Bearer ', '') : null;
 
   if (!token) {
-    return res
-      .status(UNAUTHORIZED)
-      .send({ message: t('authorization_needed') });
+    return next(new UnauthorizedError(t(tKeys.authorization_needed)));
   }
 
   let payload;
@@ -20,25 +18,23 @@ const authMiddleware = (req, res, next) => {
   try {
     payload = jwt.verify(token, ENCRYPTION_KEY);
   } catch (err) {
-    return res
-      .status(UNAUTHORIZED)
-      .send({ message: t('authorization_needed') });
+    return next(new UnauthorizedError(t(tKeys.authorization_needed)));
   }
 
   req.user = payload;
-  next();
+  return next();
 };
 
 const authLoginValidationMiddleware = celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().email().required().messages({
-      'any.required': t('field_required', ['Email']),
-      'string.empty': t('field_required', ['Email']),
-      'string.email': t('incorrect_email'),
+      'any.required': t(tKeys.field_required, [t(tKeys.email)]),
+      'string.empty': t(tKeys.field_required, [t(tKeys.email)]),
+      'string.email': t(tKeys.incorrect_email),
     }),
     password: Joi.string().required().messages({
-      'any.required': t('field_required', ['Пароль']),
-      'string.empty': t('field_required', ['Пароль']),
+      'any.required': t(tKeys.field_required, [t(tKeys.password)]),
+      'string.empty': t(tKeys.field_required, [t(tKeys.password)]),
     }),
   }),
 });
@@ -46,21 +42,21 @@ const authLoginValidationMiddleware = celebrate({
 const authRegisterValidationMiddleware = celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().email().required().messages({
-      'any.required': t('field_required', ['Email']),
-      'string.empty': t('field_required', ['Email']),
-      'string.email': t('incorrect_email'),
+      'any.required': t(tKeys.field_required, [t(tKeys.email)]),
+      'string.empty': t(tKeys.field_required, [t(tKeys.email)]),
+      'string.email': t(tKeys.incorrect_email),
     }),
     password: Joi.string().required().min(8).messages({
-      'any.required': t('field_required', ['Пароль']),
-      'string.empty': t('field_required', ['Пароль']),
-      'string.min': t('min_password_length_required'),
+      'any.required': t(tKeys.field_required, [t(tKeys.password)]),
+      'string.empty': t(tKeys.field_required, [t(tKeys.password)]),
+      'string.min': t(tKeys.min_password_length_required),
     }),
     name: Joi.string().required().min(2).max(30)
       .messages({
-        'any.required': t('field_required', ['Имя']),
-        'string.empty': t('field_required', ['Имя']),
-        'string.min': t('min_field_length_required', ['Имя', '2']),
-        'string.max': t('max_field_length_required', ['Имя', '30']),
+        'any.required': t(tKeys.field_required, [t(tKeys.name)]),
+        'string.empty': t(tKeys.field_required, [t(tKeys.name)]),
+        'string.min': t(tKeys.min_field_length_required, [t(tKeys.name), '2']),
+        'string.max': t(tKeys.max_field_length_required, [t(tKeys.name), '30']),
       }),
   }),
 });
